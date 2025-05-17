@@ -1,25 +1,14 @@
-import User from "../models/User.js";
-import ErrorResponse from "../utils/ErrorResponse.js";
-import { verifyToken } from "../config/jwt.js";
+import AppError from "../utils/error.util.js";
+import jwt from "jsonwebtoken";
 
-export const protect = async (req, res, next) => {
-  let token;
-
-  if (req.headers.authorization?.startsWith("Bearer")) {
-    token = req.headers.authorization.split(" ")[1];
-  } else if (req.cookies?.token) {
-    token = req.cookies.token;
-  }
-
+export const isLoggedIn = async (req, res, next) => {
+  const { token } = req.cookies;
   if (!token) {
-    return next(new ErrorResponse("Not authorized", 401));
+    return next(new AppError("Unauthenticated, please login first", 400));
   }
 
-  try {
-    const decoded = verifyToken(token);
-    req.user = await User.findById(decoded.id);
-    next();
-  } catch (err) {
-    return next(new ErrorResponse("Invalid token", 401));
-  }
+  const userDetails = await jwt.verify(token, process.env.JWT_SECRET);
+  req.user = userDetails;
+
+  next();
 };

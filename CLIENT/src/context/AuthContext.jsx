@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
+import { createContext, useContext, useState } from "react";
 
 export const AuthContext = createContext();
 
@@ -6,30 +7,47 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   // Check for existing session on initial load
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch {
-        localStorage.removeItem("user");
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedUser = localStorage.getItem("user");
+  //   if (storedUser) {
+  //     try {
+  //       setUser(JSON.parse(storedUser));
+  //     } catch {
+  //       localStorage.removeItem("user");
+  //     }
+  //   }
+  // }, []);
 
-  const login = async (email, password, navigate) => {
+  const login = async (email, password) => {
     try {
-      // Your login logic...
+      axios
+        .post("http://localhost:5000/api/v1/user/login", {
+          email,
+          password,
+        })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => console.log(err.message));
       setUser({ email });
-      if (navigate) navigate("/dashboard");
+      // if (navigate) navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
     }
   };
 
-  const register = async (email, password, navigate) => {
+  const register = async (fullName, email, password, navigate) => {
     try {
-      // Your registration logic...
+      axios
+        .post("http://localhost:5000/api/v1/user/register", {
+          fullName,
+          email,
+          password,
+        })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => console.log(err.message));
       setUser({ email });
       if (navigate) navigate("/dashboard");
     } catch (error) {
