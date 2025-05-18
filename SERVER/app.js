@@ -10,8 +10,8 @@ import errorMiddleware from "./middleware/error.middleware.js";
 config();
 const app = express();
 const allowedOrigins = [
-  process.env.FRONTEND_URL_PROD,
-  process.env.FRONTEND_URL_DEV,
+  "https://expense-tracker-kartikey-guptas-projects.vercel.app/",
+  "http://localhost:5173",
 ];
 
 app.use(
