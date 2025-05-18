@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const BASE_API =
-  import.meta.env.VITE_BACKEND_API_DEV || import.meta.env.VITE_BACKEND_API_PROD;
+  import.meta.env.VITE_BACKEND_API_PROD || import.meta.env.VITE_BACKEND_API_DEV;
 
 export const AuthContext = createContext();
 
