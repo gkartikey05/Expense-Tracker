@@ -1,6 +1,8 @@
 import axios from "axios";
 import { createContext, useContext, useState } from "react";
 
+const API = import.meta.env.VITE_BACKEND_API;
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -21,7 +23,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       axios
-        .post("http://localhost:5000/api/v1/user/login", {
+        .post(`${API}/user/login`, {
           email,
           password,
         })
@@ -39,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (fullName, email, password, navigate) => {
     try {
       axios
-        .post("http://localhost:5000/api/v1/user/register", {
+        .post(`${API}/user/register`, {
           fullName,
           email,
           password,
