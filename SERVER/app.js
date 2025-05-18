@@ -9,11 +9,12 @@ import errorMiddleware from './middleware/error.middleware.js'
 
 config();
 const app = express();
+const FRONTEND_URL = process.env.FRONTEND_URL_DEV || process.env.FRONTEND_URL_PROD
 
 app.use(express.json());
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL],
+    origin: [FRONTEND_URL],
     credentials: true,
   })
 );
