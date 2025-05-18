@@ -1,12 +1,14 @@
 import axios from "axios";
 import { createContext, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const BASE_API =
-  import.meta.env.VITE_BACKEND_API_PROD || import.meta.env.VITE_BACKEND_API_DEV;
+  import.meta.env.VITE_BACKEND_API_DEV || import.meta.env.VITE_BACKEND_API_PROD;
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
   // Check for existing session on initial load
@@ -30,15 +32,16 @@ export const AuthProvider = ({ children }) => {
         })
         .then((result) => {
           console.log(result);
+          setUser({ email });
+          navigate("/dashboard");
         })
         .catch((err) => console.log(err.message));
-      setUser({ email });
     } catch (error) {
       console.error("Login failed:", error);
     }
   };
 
-  const register = async (fullName, email, password, navigate) => {
+  const register = async (fullName, email, password) => {
     try {
       axios
         .post(`${BASE_API}/user/register`, {
@@ -48,10 +51,11 @@ export const AuthProvider = ({ children }) => {
         })
         .then((result) => {
           console.log(result);
+          setUser({ email });
+          navigate("/dashboard");
         })
         .catch((err) => console.log(err.message));
-      setUser({ email });
-      if (navigate) navigate("/dashboard");
+      // if (navigate) navigate("/dashboard");
     } catch (error) {
       console.error("Registration failed:", error);
     }

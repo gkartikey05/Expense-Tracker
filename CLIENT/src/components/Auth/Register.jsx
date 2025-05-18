@@ -15,8 +15,8 @@ export const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    register(formData.fullName, formData.email, formData.password);
     setIsLoading(true);
+    register(formData.fullName, formData.email, formData.password);
     setTimeout(() => {
       setIsLoading(false);
       navigate("/dashboard");

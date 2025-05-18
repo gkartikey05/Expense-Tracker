@@ -53,19 +53,23 @@ export const login = async (req, res, next) => {
     }
 
     const user = await User.findOne({ email }).select("+password");
-    if (!user || !user.comparePassword(password)) {
-      return next(new AppError("Email or Password does not match", 400));
+    if (user) {
+      if (!user.comparePassword(password)) {
+        return next(new AppError("Email and Password does not match", 400));
+      } else {
+        const token = await user.generateJWTToken();
+        user.password = undefined;
+
+        res.cookie("token", token, cookieOptions);
+        res.status(200).json({
+          success: true,
+          message: "User Logged in Successfully",
+          user,
+        });
+      }
+    } else {
+      return next(new AppError("User not found", 400));
     }
-
-    const token = await user.generateJWTToken();
-    user.password = undefined;
-
-    res.cookie("token", token, cookieOptions);
-    res.status(200).json({
-      success: true,
-      message: "User Logged in Successfully",
-      user,
-    });
   } catch (err) {
     return next(new AppError(err.message, 500));
   }
