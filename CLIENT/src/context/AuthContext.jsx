@@ -32,7 +32,6 @@ export const AuthProvider = ({ children }) => {
         })
         .catch((err) => console.log(err.message));
       setUser({ email });
-      // if (navigate) navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
     }
