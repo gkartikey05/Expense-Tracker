@@ -2,26 +2,15 @@ import axios from "axios";
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const BASE_API =
-  import.meta.env.VITE_BACKEND_API_PROD || import.meta.env.VITE_BACKEND_API_DEV;
+const BASE_API = [
+  import.meta.env.VITE_BACKEND_API_PROD || import.meta.env.VITE_BACKEND_API_DEV,
+];
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-
-  // Check for existing session on initial load
-  // useEffect(() => {
-  //   const storedUser = localStorage.getItem("user");
-  //   if (storedUser) {
-  //     try {
-  //       setUser(JSON.parse(storedUser));
-  //     } catch {
-  //       localStorage.removeItem("user");
-  //     }
-  //   }
-  // }, []);
 
   const login = async (email, password) => {
     try {
@@ -55,7 +44,6 @@ export const AuthProvider = ({ children }) => {
           navigate("/dashboard");
         })
         .catch((err) => console.log(err.message));
-      // if (navigate) navigate("/dashboard");
     } catch (error) {
       console.error("Registration failed:", error);
     }
@@ -63,7 +51,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = (navigate) => {
     setUser(null);
-    if (navigate) navigate("/login");
+    navigate("/login");
   };
 
   return (

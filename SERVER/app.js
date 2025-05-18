@@ -9,32 +9,19 @@ import errorMiddleware from "./middleware/error.middleware.js";
 
 config();
 const app = express();
-const allowedOrigins = [
-  "https://expense-tracker-kartikey-guptas-projects.vercel.app/",
-  "http://localhost:5173",
-];
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: [process.env.FRONTEND_URL_PROD, process.env.FRONTEND_URL_DEV],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
-
-app.use("/ping", function (req, res) {
-  res.send("pong");
-});
 
 //* routes of all the modules
 app.use("/api/v1/user", userRoutes);
