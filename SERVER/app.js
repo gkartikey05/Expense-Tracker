@@ -9,7 +9,7 @@ import errorMiddleware from './middleware/error.middleware.js'
 
 config();
 const app = express();
-const FRONTEND_URL = process.env.FRONTEND_URL_DEV || process.env.FRONTEND_URL_PROD
+const FRONTEND_URL = process.env.FRONTEND_URL_PROD || process.env.FRONTEND_URL_DEV
 
 app.use(express.json());
 app.use(
